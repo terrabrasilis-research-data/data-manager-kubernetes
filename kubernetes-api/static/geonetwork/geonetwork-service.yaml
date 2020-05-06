@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: geonetwork
+  labels:
+    name: geonetwork
+spec:
+  ports:
+    - port: 8080
+  selector:
+    name: geonetwork

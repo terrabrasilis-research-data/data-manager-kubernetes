@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  # - host: terrabrasilisresearchdata.dpi.inpe.br
+  - http:
+      paths:
+      - path: /terrama2
+        backend:
+          serviceName: webapp
+          servicePort: 36000
+      
+      - path: /terrama2/monitor/
+        backend:
+          serviceName: webmonitor
+          servicePort: 36001
+      
+      - path: /terrama2/admin/
+        backend:
+          serviceName: webmonitor
+          servicePort: 36000
+
+      - path: /geoserver
+        backend:
+          serviceName: geoserver
+          servicePort: 8080
+          
+      - path: /geonetwork
+        backend:
+          serviceName: geonetwork
+          servicePort: 8080
+
+      - path: /owncloud
+        backend:
+          serviceName: owncloud
+          servicePort: 8080
+
+      - backend:
+          serviceName: owncloud
+          servicePort: 8080
