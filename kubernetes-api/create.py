@@ -24,7 +24,7 @@ for folder in yaml_folders:
 
     # list the yamls
     yamls_list = os.listdir(os.path.join(STATIC_FOLDER, folder))
-    yamls_list = [k for k in yamls_list if '-service.yaml' in k]
+    yamls_list = [k for k in yamls_list if '-deployment.yaml' in k]
 
     # open each yaml
     for yamls_item in yamls_list:
