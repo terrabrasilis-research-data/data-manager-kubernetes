@@ -1,4 +1,5 @@
 #!flask/bin/python
+from kubernetes.client.rest import ApiException
 from flask_httpauth import HTTPBasicAuth
 from kubernetes import client, config
 from flask import Flask, jsonify
@@ -63,20 +64,24 @@ def read_pods():
 def create_repository():
 
     #yaml_folders = ['geonetwork', 'geoserver', 'nginx', 'owncloud', 'postgis', 'terrama2', 'volume']
-    yaml_folders = ['geonetwork', 'postgis']
+    yaml_folders = ['geonetwork']
+
+    # Configure API key authorization: BearerToken
+    configuration = client.Configuration()
+    #configuration.api_key['authorization'] = 'YOUR_API_KEY'
 
     # open folders
     for folder in yaml_folders:
         
         # list the yamls
         yamls_list = os.listdir(os.path.join(STATIC_FOLDER, folder))
-        yamls_list = [k for k in yamls_list if '.yaml' in k]
+        yamls_list = [k for k in yamls_list if '-service.yaml' in k]
 
         # open each yaml
         for yamls_item in yamls_list:
             
             # debug
-            #print(yamls_item)
+            print(yamls_item)
             
             # open yaml files
             with open(os.path.join(STATIC_FOLDER, folder, yamls_item)) as file:
@@ -88,14 +93,17 @@ def create_repository():
                 dep = yaml.safe_load(file)
 
                 # kubernetes api
-                k8s_beta = client.ExtensionsV1beta1Api()
-                
-                # create namespace and deploy yaml
-                resp = k8s_beta.create_namespaced_deployment(body=dep, namespace="default")
-                
-                # Print result
-                print("Deployment created. status='%s'" % str(resp.status))
+                api_instance = client.AppsV1Api(client.ApiClient(configuration))
 
+                # create namespace and deploy yaml
+                namespace = 'default'
+
+                try:
+                    api_response = api_instance.create_namespaced_deployment(namespace, body=dep)
+                    print(api_response)
+                except ApiException as e:
+                    print("Exception when calling AppsV1Api->create_namespaced_deployment: %s\n" % e)
+                            
     # return
     return jsonify({"result":"sucess"})
 
