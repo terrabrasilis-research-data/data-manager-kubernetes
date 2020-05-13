@@ -85,7 +85,7 @@ def create_repository():
     #      "namespace": "gabriel",
     #      "services": ["geoserver", "nginx", "postgis", "volume"]
     #  }
-
+        
     if not request.json or not 'namespace' and 'services' in request.json:
         abort(400)
 
