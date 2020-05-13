@@ -1,12 +1,12 @@
 apiVersion: v1
-kind: Service
+kind: PersistentVolumeClaim
 metadata:
-  labels:
-    name: owncloud
-  name: owncloud-sala19
-  namespace: sala19
+  name: repositorie-data-claim-felipe
+  namespace: felipe
 spec:
-  ports:
-  - port: 8080
-  selector:
-    name: owncloud
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual

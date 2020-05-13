@@ -98,6 +98,15 @@ def create_repository():
     if not result:
         abort(400)
 
+    # Configs can be set in Configuration class directly or using helper utility
+    config.load_kube_config()
+    
+    # kubernetes api
+    v1 = client.CoreV1Api()
+    
+    # list pods
+    namespace_list = v1.list_namespace()
+
     # create a namespace
     subprocess.call('kubectl create namespace ' + str(namespace), shell=True)
 
@@ -117,9 +126,15 @@ def create_repository():
                 # load yaml
                 dep = yaml.safe_load(file)
 
+            if yamls_item == 'nginx-service.yaml':
+                dep['spec']['ports'][0]['nodePort'] = dep['spec']['ports'][0]['nodePort'] + (len(namespace_list.items) - 4)
+
             # edit
             dep['metadata']['name'] = dep['metadata']['name'] + '-' + str(namespace)
             dep['metadata']['namespace'] = str(namespace)
+
+            if yamls_item == 'nginx-service.yaml':
+                print(dep)
 
             # save yaml
             with open(os.path.join(STATIC_FOLDER, 'edited_file.yaml'), 'w') as outfile:
