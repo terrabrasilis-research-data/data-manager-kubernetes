@@ -28,7 +28,7 @@ STATIC_FOLDER = os.path.join(APP_ROOT, 'static')
     
 # app
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app)
 
 # errorhandler
 @app.errorhandler(404)

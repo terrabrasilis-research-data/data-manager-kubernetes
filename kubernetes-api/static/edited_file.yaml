@@ -1,12 +1,12 @@
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: Service
 metadata:
-  name: repositorie-data-claim-felipe
-  namespace: felipe
+  labels:
+    name: owncloud
+  name: owncloud-teste
+  namespace: teste
 spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: manual
+  ports:
+  - port: 8080
+  selector:
+    name: owncloud
