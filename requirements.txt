@@ -1,5 +1,5 @@
 Flask==1.0.2
 flask-httpauth==3.3.0
-flask-cors==3.0.8
+flask-cors==3.0.9
 kubernetes==11.0.0
 PyYAML==5.3.1
